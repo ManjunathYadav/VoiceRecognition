@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>V18.VoiceConversation</RootNamespace>
-    <ProjectGuid>{D1EC838C-F14F-0BA7-4FCF-A779DD621BD8}</ProjectGuid>
+    <ProjectGuid>{4342B322-FF66-E8BD-5508-BC5403558805}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>V18.VoiceConversation</AssemblyName>
@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\Platform\SpeechRecognizerSettings.cs" />
+    <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\Platform\EditorSpeechRecognizerBackend.cs" />
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\VoiceConversationRecognizer.cs" />
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\Platform\AndroidSpeechRecognizerBackend.cs" />
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\Platform\SpeechBackendEvent.cs" />
@@ -67,7 +68,6 @@
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\SpeechRecognitionEvents.cs" />
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\TranscriptTextTarget.cs" />
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\Platform\IPlatformSpeechRecognizer.cs" />
-    <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\Platform\EditorSpeechRecognizerBackend.cs" />
     <Compile Include="Assets\VoiceRecognition\Packages\com.v18.voice-conversation\Runtime\SpeakingStatusTextTarget.cs" />
   </ItemGroup>
   <ItemGroup>

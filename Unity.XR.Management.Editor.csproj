@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{ED9AADB9-815A-B334-744D-8062717B9D4E}</ProjectGuid>
+    <ProjectGuid>{AFF78671-6CD2-3F21-E63F-10951895E29F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.XR.Management.Editor</AssemblyName>
@@ -1015,7 +1015,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.XR.Management.csproj">
-      <Project>{2AA1C672-3411-E2A5-C376-70E41A9E4092}</Project>
+      <Project>{508E2D3A-692E-7F6C-208C-2331049B0613}</Project>
       <Name>Unity.XR.Management</Name>
     </ProjectReference>
   </ItemGroup>

@@ -392,7 +392,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/VR Template Assets
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: D:\Personal\VoiceConversation
+  m_LastProjectPath: D:\PersonalLTM\VoiceRecognition
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:

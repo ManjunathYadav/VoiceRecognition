@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{853E04FB-633E-850B-F231-AED662DCDE42}</ProjectGuid>
+    <ProjectGuid>{6342FFDB-9300-1798-F275-CE2987D00612}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.XR.TestSupport</AssemblyName>
@@ -948,11 +948,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.XR.Management.Editor.csproj">
-      <Project>{ED9AADB9-815A-B334-744D-8062717B9D4E}</Project>
+      <Project>{AFF78671-6CD2-3F21-E63F-10951895E29F}</Project>
       <Name>Unity.XR.Management.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.XR.Management.csproj">
-      <Project>{2AA1C672-3411-E2A5-C376-70E41A9E4092}</Project>
+      <Project>{508E2D3A-692E-7F6C-208C-2331049B0613}</Project>
       <Name>Unity.XR.Management</Name>
     </ProjectReference>
   </ItemGroup>

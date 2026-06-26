@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C050D619-97B4-0DD3-8F82-71F80F914235}</ProjectGuid>
+    <ProjectGuid>{170E6B2A-9CD7-A385-6453-39ECC8F23AD0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Unity.XR.Management.Tests</AssemblyName>
@@ -906,15 +906,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.XR.Management.csproj">
-      <Project>{2AA1C672-3411-E2A5-C376-70E41A9E4092}</Project>
+      <Project>{508E2D3A-692E-7F6C-208C-2331049B0613}</Project>
       <Name>Unity.XR.Management</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.XR.Management.Tests.Standalone.csproj">
-      <Project>{6DD513EE-79B3-F511-B639-930BB5C1BCE2}</Project>
+      <Project>{3BAFE23D-3333-4985-A15A-32BD605B022D}</Project>
       <Name>Unity.XR.Management.Tests.Standalone</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.XR.TestSupport.csproj">
-      <Project>{853E04FB-633E-850B-F231-AED662DCDE42}</Project>
+      <Project>{6342FFDB-9300-1798-F275-CE2987D00612}</Project>
       <Name>Unity.XR.TestSupport</Name>
     </ProjectReference>
   </ItemGroup>
