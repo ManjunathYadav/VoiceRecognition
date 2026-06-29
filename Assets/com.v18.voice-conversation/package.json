@@ -1,0 +1,25 @@
+{
+  "name": "com.v18.voice-conversation",
+  "version": "0.1.0",
+  "displayName": "Quest Voice Conversation",
+  "description": "Speech recognition helpers for Oculus Quest/XR Toolkit projects: live transcript events, final utterance callbacks, and an avatar-audio gate that blocks recognition while the avatar is speaking.",
+  "unity": "2021.3",
+  "keywords": [
+    "oculus",
+    "quest",
+    "xr",
+    "speech",
+    "voice",
+    "conversation"
+  ],
+  "author": {
+    "name": "V.18"
+  },
+  "samples": [
+    {
+      "displayName": "Basic Avatar Conversation",
+      "description": "Example responder script showing how to trigger avatar audio after the user finishes speaking.",
+      "path": "Samples~/BasicAvatarConversation"
+    }
+  ]
+}
