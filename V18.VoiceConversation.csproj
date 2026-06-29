@@ -58,20 +58,18 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\Platform\SpeechRecognizerSettings.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\Platform\EditorSpeechRecognizerBackend.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\VoiceConversationRecognizer.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\Platform\AndroidSpeechRecognizerBackend.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\Platform\SpeechBackendEvent.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\AvatarSpeechGate.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\Platform\UnsupportedSpeechRecognizerBackend.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\SpeechRecognitionEvents.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\TranscriptTextTarget.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\Platform\IPlatformSpeechRecognizer.cs" />
-    <Compile Include="Assets\com.v18.voice-conversation\Runtime\SpeakingStatusTextTarget.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\Platform\UnsupportedSpeechRecognizerBackend.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\VoiceConversationRecognizer.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\AvatarSpeechGate.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\Platform\AndroidSpeechRecognizerBackend.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\Platform\SpeechBackendEvent.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\Platform\SpeechRecognizerSettings.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\SpeechRecognitionEvents.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\Platform\IPlatformSpeechRecognizer.cs" />
+    <Compile Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\TranscriptTextTarget.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\com.v18.voice-conversation\Runtime\V18.VoiceConversation.asmdef" />
+    <None Include="Assets\VoiceRecognitionPackage\com.v18.voice-conversation-0.1.0\Runtime\V18.VoiceConversation.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

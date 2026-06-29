@@ -1196,10 +1196,6 @@
       <Project>{9C7D0A02-C428-50E5-7D20-3F8109F39654}</Project>
       <Name>Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="V18.VoiceConversation.csproj">
-      <Project>{4342B322-FF66-E8BD-5508-BC5403558805}</Project>
-      <Name>V18.VoiceConversation</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
