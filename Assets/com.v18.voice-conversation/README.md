@@ -51,6 +51,8 @@ The sample script `BasicAvatarConversationResponder` shows the expected binding:
 
 Quest builds use the bundled Vosk recognizer and a small US-English model by default. Audio is decoded on the headset: no Google speech service, cloud key, or network connection is required. The Android library manifest requests `RECORD_AUDIO` and the recognizer asks for it at runtime.
 
+Listening remains active while the user is silent, and utterances are not cut off by an application-level duration limit. Recognition completes when the speech engine detects the end of the utterance.
+
 On first launch, the app copies the bundled model (about 70 MB uncompressed) from the APK into the app's private storage, then loads it. This can take a few seconds. Later launches reuse that installed copy. The small model uses roughly 300 MB of memory while loaded.
 
 The recognizer's **Quest Speech Backend** setting should remain **Offline Vosk** for Quest. **Android System** is retained as an opt-in compatibility option for ordinary Android devices that provide a system `RecognitionService`; Quest firmware normally does not.

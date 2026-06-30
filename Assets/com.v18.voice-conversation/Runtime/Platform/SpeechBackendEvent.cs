@@ -7,6 +7,7 @@ namespace V18.VoiceConversation.Platform
         EndOfSpeech,
         PartialResult,
         FinalResult,
+        RestartRequested,
         Error
     }
 
@@ -40,6 +41,11 @@ namespace V18.VoiceConversation.Platform
         public static SpeechBackendEvent Final(string text)
         {
             return new SpeechBackendEvent { Type = SpeechBackendEventType.FinalResult, Text = text };
+        }
+
+        public static SpeechBackendEvent Restart()
+        {
+            return new SpeechBackendEvent { Type = SpeechBackendEventType.RestartRequested };
         }
 
         public static SpeechBackendEvent Error(int errorCode, string errorMessage)

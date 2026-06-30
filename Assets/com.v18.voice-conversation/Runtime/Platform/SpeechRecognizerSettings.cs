@@ -8,7 +8,5 @@ namespace V18.VoiceConversation.Platform
         public int PossiblyCompleteSilenceMillis;
         public int MaxResults;
         public int OfflineSampleRate;
-        public float SpeechStartTimeoutSeconds;
-        public float MaxUtteranceSeconds;
     }
 }

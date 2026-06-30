@@ -11,6 +11,9 @@ namespace V18.VoiceConversation.Platform
         private DictationRecognizer dictationRecognizer;
         private bool disposed;
         private bool listening;
+        private bool stopRequested;
+        private bool recreateBeforeNextStart;
+        private string lastHypothesis = string.Empty;
 
         public bool IsSupported
         {
@@ -36,13 +39,17 @@ namespace V18.VoiceConversation.Platform
 
             try
             {
-                if (dictationRecognizer == null)
+                if (dictationRecognizer == null || recreateBeforeNextStart)
                 {
+                    DestroyDictationRecognizer();
                     CreateDictationRecognizer();
+                    recreateBeforeNextStart = false;
                 }
 
                 if (dictationRecognizer.Status != SpeechSystemStatus.Running)
                 {
+                    stopRequested = false;
+                    lastHypothesis = string.Empty;
                     dictationRecognizer.Start();
                     listening = true;
                     Emit(SpeechBackendEvent.Ready());
@@ -77,6 +84,8 @@ namespace V18.VoiceConversation.Platform
         private void CreateDictationRecognizer()
         {
             dictationRecognizer = new DictationRecognizer();
+            dictationRecognizer.InitialSilenceTimeoutSeconds = 3600f;
+            dictationRecognizer.AutoSilenceTimeoutSeconds = 3600f;
 
             dictationRecognizer.DictationResult += OnDictationResult;
             dictationRecognizer.DictationHypothesis += OnDictationHypothesis;
@@ -86,6 +95,7 @@ namespace V18.VoiceConversation.Platform
 
         private void StopDictationRecognizer()
         {
+            stopRequested = true;
             listening = false;
 
             if (dictationRecognizer != null && dictationRecognizer.Status == SpeechSystemStatus.Running)
@@ -120,6 +130,7 @@ namespace V18.VoiceConversation.Platform
         {
             if (!string.IsNullOrWhiteSpace(text))
             {
+                lastHypothesis = text;
                 Emit(SpeechBackendEvent.Beginning());
                 Emit(SpeechBackendEvent.Partial(text));
             }
@@ -129,6 +140,7 @@ namespace V18.VoiceConversation.Platform
         {
             if (!string.IsNullOrWhiteSpace(text))
             {
+                lastHypothesis = string.Empty;
                 Emit(SpeechBackendEvent.End());
                 Emit(SpeechBackendEvent.Final(text));
             }
@@ -137,16 +149,33 @@ namespace V18.VoiceConversation.Platform
         private void OnDictationComplete(DictationCompletionCause cause)
         {
             listening = false;
+            recreateBeforeNextStart = true;
+
+            if (disposed || stopRequested)
+            {
+                return;
+            }
 
             switch (cause)
             {
                 case DictationCompletionCause.Complete:
+                    Emit(SpeechBackendEvent.Restart());
                     break;
 
                 case DictationCompletionCause.TimeoutExceeded:
                     // Timeout is a normal completion — the recognizer auto-stops after silence.
-                    // Emit as a recoverable error so the recognizer can auto-restart.
-                    Emit(SpeechBackendEvent.Error(6, "No speech input (timeout)"));
+                    // Preserve current text when possible, then restart silently.
+                    if (!string.IsNullOrWhiteSpace(lastHypothesis))
+                    {
+                        string finalHypothesis = lastHypothesis;
+                        lastHypothesis = string.Empty;
+                        Emit(SpeechBackendEvent.End());
+                        Emit(SpeechBackendEvent.Final(finalHypothesis));
+                    }
+                    else
+                    {
+                        Emit(SpeechBackendEvent.Restart());
+                    }
                     break;
 
                 default:
@@ -158,6 +187,7 @@ namespace V18.VoiceConversation.Platform
         private void OnDictationError(string error, int hresult)
         {
             listening = false;
+            recreateBeforeNextStart = true;
             Emit(SpeechBackendEvent.Error(-1,
                 "Windows speech recognition error: " + error
                 + " (HRESULT: 0x" + hresult.ToString("X8") + "). "

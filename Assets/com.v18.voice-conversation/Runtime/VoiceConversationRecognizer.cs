@@ -30,8 +30,6 @@ namespace V18.VoiceConversation
         [Tooltip("Offline Vosk works on Quest without Google speech services or a cloud key. Android System is retained only for devices that provide a RecognitionService.")]
         [SerializeField] private QuestSpeechBackend questSpeechBackend = QuestSpeechBackend.OfflineVosk;
         [SerializeField] [Range(8000, 48000)] private int offlineSampleRate = 16000;
-        [SerializeField] [Min(2f)] private float speechStartTimeoutSeconds = 12f;
-        [SerializeField] [Min(3f)] private float maxUtteranceSeconds = 20f;
 
         [Header("Speech Endpointing")]
         [SerializeField] [Min(250)] private int completeSilenceMillis = 900;
@@ -142,8 +140,6 @@ namespace V18.VoiceConversation
             possiblyCompleteSilenceMillis = Mathf.Max(250, possiblyCompleteSilenceMillis);
             maxResults = Mathf.Max(1, maxResults);
             offlineSampleRate = Mathf.Clamp(offlineSampleRate, 8000, 48000);
-            speechStartTimeoutSeconds = Mathf.Max(2f, speechStartTimeoutSeconds);
-            maxUtteranceSeconds = Mathf.Max(3f, maxUtteranceSeconds);
         }
 
         private void OnApplicationPause(bool paused)
@@ -298,9 +294,7 @@ namespace V18.VoiceConversation
                 CompleteSilenceMillis = completeSilenceMillis,
                 PossiblyCompleteSilenceMillis = possiblyCompleteSilenceMillis,
                 MaxResults = maxResults,
-                OfflineSampleRate = offlineSampleRate,
-                SpeechStartTimeoutSeconds = speechStartTimeoutSeconds,
-                MaxUtteranceSeconds = maxUtteranceSeconds
+                OfflineSampleRate = offlineSampleRate
             };
         }
 
@@ -470,6 +464,16 @@ namespace V18.VoiceConversation
                     }
 
                     if (!manualStopRequested && autoStartListening && restartAfterFinalResult && !IsRecognitionBlocked)
+                    {
+                        ScheduleListeningRestart(restartDelaySeconds);
+                    }
+                    break;
+
+                case SpeechBackendEventType.RestartRequested:
+                    SetListeningState(false);
+                    SetUserSpeakingState(false);
+
+                    if (!manualStopRequested && autoStartListening && !IsRecognitionBlocked)
                     {
                         ScheduleListeningRestart(restartDelaySeconds);
                     }

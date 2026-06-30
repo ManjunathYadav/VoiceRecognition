@@ -44,7 +44,6 @@ namespace V18.VoiceConversation.Platform
         private AndroidJavaObject recognizer;
         private AudioClip microphoneClip;
         private int microphonePosition;
-        private float captureStartedAt;
         private string lastPartial = string.Empty;
         private bool modelReady;
         private bool pendingStart;
@@ -157,15 +156,6 @@ namespace V18.VoiceConversation.Platform
                 }
             }
 
-            float elapsed = Time.unscaledTime - captureStartedAt;
-            if (!userSpeaking && elapsed >= settings.SpeechStartTimeoutSeconds)
-            {
-                FailSession(6, "No speech input (timeout)");
-            }
-            else if (elapsed >= settings.MaxUtteranceSeconds)
-            {
-                FinishCurrentUtterance();
-            }
         }
 
         public void Dispose()
@@ -308,7 +298,6 @@ namespace V18.VoiceConversation.Platform
                     (float)microphoneClip.frequency);
 
                 microphonePosition = 0;
-                captureStartedAt = Time.unscaledTime;
                 lastPartial = string.Empty;
                 userSpeaking = false;
                 capturing = true;
@@ -373,19 +362,6 @@ namespace V18.VoiceConversation.Platform
 
                 Emit(SpeechBackendEvent.Partial(partial));
             }
-        }
-
-        private void FinishCurrentUtterance()
-        {
-            string text = GetRecognizerText("getFinalResult", "text");
-
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                FailSession(userSpeaking ? 7 : 6, userSpeaking ? "No recognition match" : "No speech input");
-                return;
-            }
-
-            CompleteRecognition(text);
         }
 
         private void CompleteRecognition(string text)
