@@ -36,6 +36,7 @@ namespace V18.VoiceConversation
             recognizer.UserSpeakingStateChanged.AddListener(OnUserSpeakingStateChanged);
             recognizer.TranscriptUpdated.AddListener(OnTranscriptUpdated);
             recognizer.FinalTranscript.AddListener(OnFinalTranscript);
+            recognizer.RecognitionError.AddListener(OnRecognitionError);
         }
 
         private void OnDisable()
@@ -48,6 +49,7 @@ namespace V18.VoiceConversation
             recognizer.UserSpeakingStateChanged.RemoveListener(OnUserSpeakingStateChanged);
             recognizer.TranscriptUpdated.RemoveListener(OnTranscriptUpdated);
             recognizer.FinalTranscript.RemoveListener(OnFinalTranscript);
+            recognizer.RecognitionError.RemoveListener(OnRecognitionError);
         }
 
         private void OnUserSpeakingStateChanged(bool isSpeaking)
@@ -74,6 +76,11 @@ namespace V18.VoiceConversation
             // Always show the stopped text when a final result arrives.
             // This covers cases where EndOfSpeech was not emitted.
             SetText(stoppedTalkingText);
+        }
+
+        private void OnRecognitionError(string message)
+        {
+            SetText(message);
         }
 
         private void SetText(string value)

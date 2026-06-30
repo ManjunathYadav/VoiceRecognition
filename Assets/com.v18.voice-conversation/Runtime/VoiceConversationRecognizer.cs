@@ -8,6 +8,12 @@ using UnityEngine.Android;
 
 namespace V18.VoiceConversation
 {
+    public enum QuestSpeechBackend
+    {
+        OfflineVosk = 0,
+        AndroidSystem = 1
+    }
+
     [DisallowMultipleComponent]
     [AddComponentMenu("Voice Conversation/Voice Conversation Recognizer")]
     public sealed class VoiceConversationRecognizer : MonoBehaviour
@@ -19,6 +25,13 @@ namespace V18.VoiceConversation
         [SerializeField] [Min(0f)] private float restartDelaySeconds = 0.25f;
         [SerializeField] private string recognitionLanguage = "en-US";
         [SerializeField] private bool preferOfflineRecognition;
+
+        [Header("Quest Device")]
+        [Tooltip("Offline Vosk works on Quest without Google speech services or a cloud key. Android System is retained only for devices that provide a RecognitionService.")]
+        [SerializeField] private QuestSpeechBackend questSpeechBackend = QuestSpeechBackend.OfflineVosk;
+        [SerializeField] [Range(8000, 48000)] private int offlineSampleRate = 16000;
+        [SerializeField] [Min(2f)] private float speechStartTimeoutSeconds = 12f;
+        [SerializeField] [Min(3f)] private float maxUtteranceSeconds = 20f;
 
         [Header("Speech Endpointing")]
         [SerializeField] [Min(250)] private int completeSilenceMillis = 900;
@@ -55,6 +68,7 @@ namespace V18.VoiceConversation
         private int recognitionBlockerCount;
         private float nextAllowedStartTime;
         private string lastTranscript = string.Empty;
+        private bool applicationPaused;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         private PermissionCallbacks permissionCallbacks;
@@ -108,6 +122,13 @@ namespace V18.VoiceConversation
         {
             DrainBackendEvents();
 
+            IUpdatableSpeechRecognizer updatableBackend = backend as IUpdatableSpeechRecognizer;
+            if (updatableBackend != null)
+            {
+                updatableBackend.Tick();
+                DrainBackendEvents();
+            }
+
             if (!manualStopRequested && CanAttemptListeningNow())
             {
                 TryStartListening();
@@ -120,6 +141,29 @@ namespace V18.VoiceConversation
             completeSilenceMillis = Mathf.Max(250, completeSilenceMillis);
             possiblyCompleteSilenceMillis = Mathf.Max(250, possiblyCompleteSilenceMillis);
             maxResults = Mathf.Max(1, maxResults);
+            offlineSampleRate = Mathf.Clamp(offlineSampleRate, 8000, 48000);
+            speechStartTimeoutSeconds = Mathf.Max(2f, speechStartTimeoutSeconds);
+            maxUtteranceSeconds = Mathf.Max(3f, maxUtteranceSeconds);
+        }
+
+        private void OnApplicationPause(bool paused)
+        {
+            applicationPaused = paused;
+
+            if (paused)
+            {
+                if (backend != null)
+                {
+                    backend.CancelListening();
+                }
+
+                SetListeningState(false);
+                SetUserSpeakingState(false);
+            }
+            else if (!manualStopRequested && autoStartListening)
+            {
+                ScheduleListeningRestart(restartDelaySeconds);
+            }
         }
 
         public void StartListening()
@@ -232,7 +276,12 @@ namespace V18.VoiceConversation
         private IPlatformSpeechRecognizer CreatePlatformBackend()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            return new AndroidSpeechRecognizerBackend();
+            if (questSpeechBackend == QuestSpeechBackend.AndroidSystem)
+            {
+                return new AndroidSpeechRecognizerBackend();
+            }
+
+            return new VoskSpeechRecognizerBackend(this);
 #elif UNITY_EDITOR_WIN
             return new EditorSpeechRecognizerBackend();
 #else
@@ -248,7 +297,10 @@ namespace V18.VoiceConversation
                 PreferOfflineRecognition = preferOfflineRecognition,
                 CompleteSilenceMillis = completeSilenceMillis,
                 PossiblyCompleteSilenceMillis = possiblyCompleteSilenceMillis,
-                MaxResults = maxResults
+                MaxResults = maxResults,
+                OfflineSampleRate = offlineSampleRate,
+                SpeechStartTimeoutSeconds = speechStartTimeoutSeconds,
+                MaxUtteranceSeconds = maxUtteranceSeconds
             };
         }
 
@@ -267,6 +319,7 @@ namespace V18.VoiceConversation
         private bool CanAttemptListeningNow()
         {
             return isActiveAndEnabled
+                && !applicationPaused
                 && !listening
                 && !IsRecognitionBlocked
                 && Time.unscaledTime >= nextAllowedStartTime;
@@ -451,6 +504,11 @@ namespace V18.VoiceConversation
 
             RecognitionError.Invoke(message);
             Log(message);
+
+            if (speechEvent.ErrorCode < 0)
+            {
+                nextAllowedStartTime = float.PositiveInfinity;
+            }
 
             if (!manualStopRequested
                 && autoStartListening

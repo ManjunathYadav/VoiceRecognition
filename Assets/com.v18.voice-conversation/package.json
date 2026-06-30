@@ -1,8 +1,8 @@
 {
   "name": "com.v18.voice-conversation",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "displayName": "Quest Voice Conversation",
-  "description": "Speech recognition helpers for Oculus Quest/XR Toolkit projects: live transcript events, final utterance callbacks, and an avatar-audio gate that blocks recognition while the avatar is speaking.",
+  "description": "Offline on-device speech recognition for Oculus Quest/XR Toolkit projects, with live transcript events, final utterance callbacks, and an avatar-audio gate.",
   "unity": "2021.3",
   "keywords": [
     "oculus",

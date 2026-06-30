@@ -11,15 +11,11 @@ Drop-in Unity Package Manager package for an XR Toolkit/Oculus Quest scene where
 
 This repository already contains the package at:
 
-`Packages/com.v18.voice-conversation`
+`Assets/com.v18.voice-conversation`
 
-To use it in another project, copy that folder into the target project's `Packages` folder, or add it from Unity with:
+To use it in another project, copy that folder into the target project's `Assets` folder.
 
-`Window > Package Manager > + > Add package from disk...`
-
-Then choose:
-
-`Packages/com.v18.voice-conversation/package.json`
+The folder uses the Unity package layout but is embedded under `Assets` so its Android library and offline model are included automatically.
 
 ## Scene Setup
 
@@ -38,7 +34,7 @@ The sample script `BasicAvatarConversationResponder` shows the expected binding:
 
 ## How The Flow Works
 
-`VoiceConversationRecognizer` starts Android speech recognition and emits:
+`VoiceConversationRecognizer` starts platform speech recognition and emits:
 
 - `TranscriptUpdated(string)` for partial and final text.
 - `FinalTranscript(string)` for final recognized text.
@@ -53,9 +49,15 @@ The sample script `BasicAvatarConversationResponder` shows the expected binding:
 
 ## Quest Notes
 
-This package uses Android's native `SpeechRecognizer` in Android device builds and includes a small Android library manifest that requests `RECORD_AUDIO`.
+Quest builds use the bundled Vosk recognizer and a small US-English model by default. Audio is decoded on the headset: no Google speech service, cloud key, or network connection is required. The Android library manifest requests `RECORD_AUDIO` and the recognizer asks for it at runtime.
 
-Important: some Quest OS/device configurations do not expose an Android speech recognition service. If `RecognitionError` says `Android SpeechRecognizer is not available`, the Unity side is wired correctly, but the headset does not have a native speech provider available. In that case, keep these scene components and replace the backend with Meta Voice SDK, Wit.ai, Azure, Google, or another STT provider.
+On first launch, the app copies the bundled model (about 70 MB uncompressed) from the APK into the app's private storage, then loads it. This can take a few seconds. Later launches reuse that installed copy. The small model uses roughly 300 MB of memory while loaded.
+
+The recognizer's **Quest Speech Backend** setting should remain **Offline Vosk** for Quest. **Android System** is retained as an opt-in compatibility option for ordinary Android devices that provide a system `RecognitionService`; Quest firmware normally does not.
+
+The bundled model recognizes US English. To use another language, replace the files under `Runtime/Plugins/Android/VoiceConversation.androidlib/assets`, then update `ModelAssetRoot`, `ModelInstallVersion`, and `ModelFiles` in `VoskSpeechRecognizerBackend.cs`.
+
+Recognition and model-loading errors are logged and are also sent through `RecognitionError`. `SpeakingStatusTextTarget` displays these errors in-headset, which makes device-only failures visible without Logcat.
 
 ## Editor Testing
 

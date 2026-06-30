@@ -12,4 +12,9 @@ namespace V18.VoiceConversation.Platform
         void StopListening();
         void CancelListening();
     }
+
+    internal interface IUpdatableSpeechRecognizer
+    {
+        void Tick();
+    }
 }
